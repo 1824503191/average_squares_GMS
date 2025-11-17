@@ -1,5 +1,7 @@
 """Computation of weighted average of squares."""
 
+import argparse  # 新增：导入 argparse
+
 
 def average_of_squares(list_of_numbers, list_of_weights=None):
     """ Return the weighted average of a list of values.
@@ -51,12 +53,24 @@ def convert_numbers(list_of_strings):
 
 
 if __name__ == "__main__":
-    numbers_strings = ["1","2","4"]
-    weight_strings = ["1","1","1"]        
-    
-    numbers = convert_numbers(numbers_strings)
-    weights = convert_numbers(weight_strings)
-    
-    result = average_of_squares(numbers, weights)
-    
+    # 创建命令行解析器
+    parser = argparse.ArgumentParser(
+        description="Compute the (unweighted) average of squares."
+    )
+    # 位置参数：numbers，可以有一个或多个
+    parser.add_argument(
+        "numbers",
+        nargs="+",
+        help="Numbers to be squared and averaged"
+    )
+
+    # 解析命令行参数
+    args = parser.parse_args()
+
+    # 将命令行传入的字符串转换成数字列表
+    numbers = convert_numbers(args.numbers)
+
+    # 现在先做 constant weight：不传 weights 参数 => 默认全是 1
+    result = average_of_squares(numbers)
+
     print(result)
