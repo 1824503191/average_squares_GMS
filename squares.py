@@ -53,10 +53,13 @@ def convert_numbers(list_of_strings):
 
 
 if __name__ == "__main__":
+    import argparse
+
     # 创建命令行解析器
     parser = argparse.ArgumentParser(
-        description="Compute the (unweighted) average of squares."
+        description="Compute the weighted average of squares."
     )
+
     # 位置参数：numbers，可以有一个或多个
     parser.add_argument(
         "numbers",
@@ -64,13 +67,27 @@ if __name__ == "__main__":
         help="Numbers to be squared and averaged"
     )
 
+    # ⭐ 添加可选参数 weights
+    parser.add_argument(
+        "--weights",
+        nargs="+",              # 接受多个参数
+        help="Optional weights for each number"
+    )
+
     # 解析命令行参数
     args = parser.parse_args()
 
-    # 将命令行传入的字符串转换成数字列表
+    # 将 numbers 转成 float 列表
     numbers = convert_numbers(args.numbers)
 
-    # 现在先做 constant weight：不传 weights 参数 => 默认全是 1
-    result = average_of_squares(numbers)
+    # 将 weights 转成 float 列表（如果用户有输入）
+    if args.weights is not None:
+        weights = convert_numbers(args.weights)
+    else:
+        weights = None    # 默认情况（使用 equal weights）
+
+    # 调用函数（会自动处理 None = 全部权重为 1）
+    result = average_of_squares(numbers, weights)
 
     print(result)
+
